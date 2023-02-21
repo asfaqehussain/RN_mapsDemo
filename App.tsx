@@ -5,22 +5,29 @@ import MapView, { Callout, Circle, Marker } from "react-native-maps";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 
-const App = () => {
-  const [region, setRegion] = React.useState({
+
+type Coords = {
+  latitude: number;
+  longitude: number;
+};
+
+const App: React.FC = () => {
+  const [region, setRegion] = useState<Region>({
     latitude: 20.5937,
     longitude: 78.9629,
     latitudeDelta: 20.022,
     longitudeDelta: 20.0421,
   });
 
-  React.useEffect(() => {
-    (async () => {
+  useEffect(() => {
+    const getLocationPermission = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         return;
       }
       getCurrentLocation();
-    })();
+    };
+    getLocationPermission();
   }, []);
 
   const getCurrentLocation = async () => {
